@@ -9,27 +9,33 @@
 	</head>
 
 	<body ng-controller="recordsController">
-		<label>Поиск: <input ng-model="searchText"></label>
-
+		<hr>
 		<table>
-			<th>
-				Агент
-			</th>
-			<th>
-				Номер звонящего
-			</th>
-			<th>
-				Дата и время звонка
-			</th>
-			<th>
-				Запись разговора
-			</th>
-			<tr ng-repeat="record in filteredRecords | filter:searchText:strict">
+			<tr>
+				<th>Поиск:<input ng-model="searchText.Agent"></th>
+				<th>Поиск:<input ng-model="searchText.Phone"></th>
+				<th>Поиск:<input ng-model="searchText.CallDate"></th>
+			</tr>
+			<tr>
+				<th>
+					Агент
+				</th>
+				<th>
+					Номер звонящего
+				</th>
+				<th>
+					Дата и время звонка
+				</th>
+				<th>
+					Запись разговора
+				</th>
+			</tr>
+			<tr ng-repeat="record in filteredRecords = (records | filter : searchText) | limitTo:numPerPage:numPerPage*(currentPage-1)">
 				<td>{{record.Agent}}</td>
 				<td>{{record.Phone}}</td>
 				<td>{{record.CallDate}}</td>
 				<td>
-					<audio controls>
+					<audio controls preload="none">
 						<source src="{{record.Location}}" type="audio/mpeg">
 						Your browser does not support the audio element.
 					</audio>
