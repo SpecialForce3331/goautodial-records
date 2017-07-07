@@ -12,9 +12,9 @@
 		<hr>
 		<table>
 			<tr>
-				<th>Поиск:<input ng-model="searchText.Agent"></th>
-				<th>Поиск:<input ng-model="searchText.Phone"></th>
-				<th>Поиск:<input ng-model="searchText.CallDate"></th>
+				<th>Поиск: <input ng-model="searchText.Agent"></th>
+				<th>Поиск: <input ng-model="searchText.Phone"></th>
+				<th>Поиск: <input ng-model="searchText.CallDate"></th>
 			</tr>
 			<tr>
 				<th>
@@ -36,7 +36,7 @@
 				<td>{{record.CallDate}}</td>
 				<td>
 					<audio controls preload="none">
-						<source src="{{record.Location}}" type="audio/mpeg">
+						<source src="{{record.Location}}" type="audio/mp3">
 						Your browser does not support the audio element.
 					</audio>
 				</td>
@@ -48,5 +48,10 @@
 		    max-size="maxSize"  
 		    boundary-links="true">
 		</pagination>
+
+		<div id="mydiv" ng-show="loading">
+		    <img src="img/ajax-loader.gif" class="ajax-loader"/>
+		</div>
+
 	</body>
 </html>

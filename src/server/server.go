@@ -12,7 +12,7 @@ import (
 const (
 	HTTP_PORT = 8080
 	SQL_LOGIN = "records"
-	SQL_PASSWORD = "pass"
+	SQL_PASSWORD = "283g238dg28g"
 	SQL_HOST = "localhost"
 	SQL_PORT = 3306
 	SQL_DB = "asterisk"
@@ -46,7 +46,7 @@ func dbOpen() *sql.DB {
 }
 
 func dbSelect(db *sql.DB) []Record {
-	rows, err := db.Query("SELECT agent, phone, location, call_date FROM goautodial_recordings_view WHERE location IS NOT NULL ORDER BY call_date")
+	rows, err := db.Query("SELECT agent, phone, location, call_date FROM goautodial_recordings_view WHERE location IS NOT NULL ORDER BY call_date DESC")
 
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
