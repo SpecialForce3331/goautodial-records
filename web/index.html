@@ -1,0 +1,46 @@
+<html ng-app="recordsApp">
+	<head>
+		<title>GoAutoDial call records</title>
+		<script type="text/javascript" src="js/angular.min.js"></script>
+		<script type="text/javascript" src="js/lib.js"></script>
+		<link data-require="bootstrap-css@*" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+	    <script data-require="ui-bootstrap@*" data-semver="0.12.1" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
+	    <link rel="stylesheet" href="css/style.css" />
+	</head>
+
+	<body ng-controller="recordsController">
+		<label>Поиск: <input ng-model="searchText"></label>
+
+		<table>
+			<th>
+				Агент
+			</th>
+			<th>
+				Номер звонящего
+			</th>
+			<th>
+				Дата и время звонка
+			</th>
+			<th>
+				Запись разговора
+			</th>
+			<tr ng-repeat="record in filteredRecords | filter:searchText:strict">
+				<td>{{record.Agent}}</td>
+				<td>{{record.Phone}}</td>
+				<td>{{record.CallDate}}</td>
+				<td>
+					<audio controls>
+						<source src="{{record.Location}}" type="audio/mpeg">
+						Your browser does not support the audio element.
+					</audio>
+				</td>
+			</tr>
+		</table>
+		<pagination 
+	    	ng-model="currentPage"
+		    total-items="records.length"
+		    max-size="maxSize"  
+		    boundary-links="true">
+		</pagination>
+	</body>
+</html>
