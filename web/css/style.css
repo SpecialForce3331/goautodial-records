@@ -1,24 +1,24 @@
-   body {
+body {
     padding: 20px;
-   }
+}
 
-   table {
+table {
     border: 4px double #333; /* Рамка вокруг таблицы */ 
     border-collapse: separate; /* Способ отображения границы */ 
     width: 100%; /* Ширина таблицы */ 
     border-spacing: 7px 11px; /* Расстояние между ячейками */ 
-   }
-   td {
+}
+td {
     padding: 5px; /* Поля вокруг текста */ 
     border: 1px solid #a52a2a; /* Граница вокруг ячеек */ 
-   }
+}
 
-   label span {
+label span {
     display: inline-block;
     width: 200px;
-   }
+}
 
-   #mydiv {  
+#mydiv {  
     position:absolute;
     top:0;
     left:0;
@@ -27,7 +27,7 @@
     z-index:1000;
     background-color:grey;
     opacity: .8;
- }
+    }
 
 .ajax-loader {
     position: absolute;
@@ -35,5 +35,5 @@
     top: 50%;
     margin-left: -32px; /* -1 * image width / 2 */
     margin-top: -32px;  /* -1 * image height / 2 */
-    display: block;     
+    display: block;  
 }

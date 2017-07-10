@@ -46,7 +46,7 @@ func dbOpen() *sql.DB {
 }
 
 func dbSelect(db *sql.DB) []Record {
-	rows, err := db.Query("SELECT agent, phone, location, call_date FROM goautodial_recordings_view WHERE location IS NOT NULL ORDER BY call_date DESC")
+	rows, err := db.Query("SELECT agent, phone, location, call_date FROM goautodial_recordings_views WHERE location IS NOT NULL ORDER BY call_date DESC")
 
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
