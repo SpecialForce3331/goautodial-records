@@ -16,6 +16,7 @@ const (
 	SQL_HOST = "localhost"
 	SQL_PORT = 3306
 	SQL_DB = "asterisk"
+	SQL_FIELD_INBOUND_list_id = 999
 ) 
 
 type Record struct {
@@ -23,6 +24,7 @@ type Record struct {
     Phone string
     Location string
     CallDate string
+    IsInbound bool
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -61,13 +63,20 @@ func dbSelect(db *sql.DB) []Record {
 			var phone string
 			var location string
 			var callDate string
+			var listId int
+			var isInbound bool = false
 
-	        if err := rows.Scan(&agent, &phone, &location, &callDate); err != nil {
+
+	        if err := rows.Scan(&agent, &phone, &location, &callDate, &listId); err != nil {
                 log.Println(err)
                 log.Println(agent, phone, location, callDate)
 	        }
 
-	        record := Record{agent, phone, location, callDate}
+	        if listId == 999 {
+	        	isInbound = true
+	        }
+
+	        record := Record{agent, phone, location, callDate, isInbound}
 
 	        records = append(records, record)
 
