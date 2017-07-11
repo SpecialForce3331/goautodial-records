@@ -10,13 +10,13 @@ import (
 )
 
 const (
-	HTTP_PORT = 8080
-	SQL_LOGIN = "records"
-	SQL_PASSWORD = "283g238dg28g"
-	SQL_HOST = "localhost"
-	SQL_PORT = 3306
-	SQL_DB = "asterisk"
-	SQL_FIELD_INBOUND_list_id = 999
+	HTTP_PORT int = 8080
+	SQL_LOGIN string = "records"
+	SQL_PASSWORD string = "283g238dg28g"
+	SQL_HOST string = "localhost"
+	SQL_PORT int = 3306
+	SQL_DB string = "asterisk"
+	SQL_FIELD_INBOUND_list_id int = 999
 ) 
 
 type Record struct {
@@ -48,7 +48,7 @@ func dbOpen() *sql.DB {
 }
 
 func dbSelect(db *sql.DB) []Record {
-	rows, err := db.Query("SELECT agent, phone, location, call_date FROM goautodial_recordings_views WHERE location IS NOT NULL ORDER BY call_date DESC")
+	rows, err := db.Query("SELECT agent, phone, location, call_date, list_id FROM goautodial_recordings_views WHERE location IS NOT NULL AND phone IS NOT NULL and list_id IS NOT NULL ORDER BY call_date DESC")
 
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
@@ -69,10 +69,10 @@ func dbSelect(db *sql.DB) []Record {
 
 	        if err := rows.Scan(&agent, &phone, &location, &callDate, &listId); err != nil {
                 log.Println(err)
-                log.Println(agent, phone, location, callDate)
+                log.Println(agent, phone, location, callDate, listId)
 	        }
 
-	        if listId == 999 {
+	        if listId == SQL_FIELD_INBOUND_list_id  {
 	        	isInbound = true
 	        }
 

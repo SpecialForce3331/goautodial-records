@@ -12,7 +12,13 @@
 		<hr>
 		<table>
 			<tr>
-				<th></th>
+				<th>Фильтр: 
+					<select ng-model="searchText.IsInbound">
+						<option value="true">Входящие</option>
+						<option value="false">Исходящие</option>
+						<option value="">Все</option>
+					</select>
+				</th>
 				<th>Поиск: <input ng-model="searchText.Agent"></th>
 				<th>Поиск: <input ng-model="searchText.Phone"></th>
 				<th>Поиск: <input ng-model="searchText.CallDate"></th>
@@ -35,7 +41,7 @@
 				</th>
 			</tr>
 			<tr ng-repeat="record in filteredRecords = (records | filter : searchText) | limitTo:numPerPage:numPerPage*(currentPage-1)">
-				<td>{{record.isInbound ? "Входящий" : "Исходящий"}}</td>
+				<td>{{record.IsInbound ? "Входящий" : "Исходящий"}}</td>
 				<td>{{record.Agent}}</td>
 				<td>{{record.Phone}}</td>
 				<td>{{record.CallDate}}</td>
