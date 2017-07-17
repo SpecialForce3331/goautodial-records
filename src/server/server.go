@@ -7,17 +7,8 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
+	"server/config_parser"
 )
-
-const (
-	HTTP_PORT int = 8080
-	SQL_LOGIN string = "records"
-	SQL_PASSWORD string = "283g238dg28g"
-	SQL_HOST string = "localhost"
-	SQL_PORT int = 3306
-	SQL_DB string = "asterisk"
-	SQL_FIELD_INBOUND_list_id int = 999
-) 
 
 type Record struct {
     Agent string
@@ -26,6 +17,8 @@ type Record struct {
     CallDate string
     IsInbound bool
 }
+
+var cfg config_parser.Config
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	records := getRecords()
@@ -40,7 +33,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func dbOpen() *sql.DB {
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",SQL_LOGIN, SQL_PASSWORD, SQL_HOST, SQL_PORT, SQL_DB))
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",cfg.SQL_LOGIN, cfg.SQL_PASSWORD, cfg.SQL_HOST, cfg.SQL_PORT, cfg.SQL_DB))
 	if err != nil {
     	panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
 	}
@@ -63,16 +56,17 @@ func dbSelect(db *sql.DB) []Record {
 			var phone string
 			var location string
 			var callDate string
-			var listId int
+			var listId string
 			var isInbound bool = false
-
 
 	        if err := rows.Scan(&agent, &phone, &location, &callDate, &listId); err != nil {
                 log.Println(err)
                 log.Println(agent, phone, location, callDate, listId)
 	        }
 
-	        if listId == SQL_FIELD_INBOUND_list_id  {
+	        // fmt.Println(listId, listId == "900")
+
+	        if listId == cfg.SQL_FIELD_INBOUND_list_id {
 	        	isInbound = true
 	        }
 
@@ -99,8 +93,10 @@ func getRecords() []Record {
 }
 
 func main() {
-	fmt.Println(fmt.Sprintf("Server started!\nListening %d port...",HTTP_PORT))
+	cfg = config_parser.GetConfig() 
+
+	fmt.Println(fmt.Sprintf("Server started!\nListening %s port...",cfg.HTTP_PORT))
 	http.HandleFunc("/records", handler)
 	http.Handle("/", http.FileServer(http.Dir("./web")))
-	http.ListenAndServe(fmt.Sprintf(":%d",HTTP_PORT), nil)
+	http.ListenAndServe(fmt.Sprintf(":%s",cfg.HTTP_PORT), nil)
 }
