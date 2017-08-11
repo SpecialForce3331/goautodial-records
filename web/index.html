@@ -1,11 +1,6 @@
 <html ng-app="recordsApp">
 	<head>
 		<title>GoAutoDial call records</title>
-		<script type="text/javascript" src="js/angular.min.js"></script>
-		<script type="text/javascript" src="js/lib.js"></script>
-		<link data-require="bootstrap-css@*" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
-	    <script data-require="ui-bootstrap@*" data-semver="0.12.1" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
-	    <link rel="stylesheet" href="css/style.css" />
 	</head>
 
 	<body ng-controller="recordsController">
@@ -22,7 +17,9 @@
 				<th>Поиск: <input ng-model="searchText.Agent"></th>
 				<th>Поиск: <input ng-model="searchText.Phone"></th>
 				<th>Поиск: <input ng-model="searchText.CallDate"></th>
-				<th></th>
+				<th>
+					Дата: <input class="calendar" type="text">
+				</th>
 			</tr>
 			<tr>
 				<th>
@@ -69,5 +66,17 @@
 		    <img src="img/ajax-loader.gif" class="ajax-loader"/>
 		</div>
 
+		<div id="calendar-background">
+			<div class="calendar"></div>
+		</div>
 	</body>
+
+	<script type="text/javascript" src="js/pickmeup.min.js"></script>
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/lib.js"></script>
+
+	<link data-require="bootstrap-css@*" data-semver="3.3.1" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <script data-require="ui-bootstrap@*" data-semver="0.12.1" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
+	<link rel="stylesheet" href="css/pickmeup.css" />
+    <link rel="stylesheet" href="css/style.css" />
 </html>

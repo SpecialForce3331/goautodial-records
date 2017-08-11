@@ -21,7 +21,10 @@ type Record struct {
 var cfg config_parser.Config
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	records := getRecords()
+
+	date := r.URL.Query().Get("date")
+
+	records := getRecords(date)
 	records_json, err := json.Marshal(records)
 
 	if err != nil {
@@ -40,15 +43,30 @@ func dbOpen() *sql.DB {
 	return db
 }
 
-func dbSelect(db *sql.DB) []Record {
-	rows, err := db.Query(fmt.Sprintf(`
-		SELECT agent, phone, location, call_date, list_id 
-		FROM goautodial_recordings_views 
-		WHERE location IS NOT NULL 
-		AND phone IS NOT NULL 
-		AND list_id IS NOT NULL 
-		AND call_date BETWEEN DATE_SUB(CURDATE(), INTERVAL %s DAY) AND NOW() 
-		ORDER BY call_date DESC`, cfg.DAYS_SELECT_COUNT))
+func dbSelect(db *sql.DB, date string) []Record {
+	var query string
+
+	if date != "" {
+		query = fmt.Sprintf(`
+			SELECT agent, phone, location, call_date, list_id 
+			FROM goautodial_recordings_views 
+			WHERE location IS NOT NULL 
+			AND phone IS NOT NULL 
+			AND list_id IS NOT NULL 
+			AND call_date BETWEEN "%s" AND "%s" 
+			ORDER BY call_date DESC`, date+" 00:00:00", date+" 23:59:59")
+	} else {
+		query = fmt.Sprintf(`
+			SELECT agent, phone, location, call_date, list_id 
+			FROM goautodial_recordings_views 
+			WHERE location IS NOT NULL 
+			AND phone IS NOT NULL 
+			AND list_id IS NOT NULL 
+			AND call_date BETWEEN DATE_SUB(CURDATE(), INTERVAL %s DAY) AND NOW() 
+			ORDER BY call_date DESC`, cfg.DAYS_SELECT_COUNT)
+	}
+
+	rows, err := db.Query(query)
 
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
@@ -86,11 +104,11 @@ func dbSelect(db *sql.DB) []Record {
 	return records
 }
 
-func getRecords() []Record {
+func getRecords(date string) []Record {
 	db := dbOpen()
 	defer db.Close()
 
-	return dbSelect(db)
+	return dbSelect(db, date)
 }
 
 func main() {
